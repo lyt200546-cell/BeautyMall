@@ -1,0 +1,47 @@
+﻿@model MZWlyt.Models.tb_cart
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>删除购物车中商品</h2>
+
+<div class="detail-card">
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.pname)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.pname)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.uname)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.uname)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.price)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.price)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.nums)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.nums)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.photo)</span>
+        <span class="detail-value">
+            @{
+                var photoPath = Model.tb_product.photo.Trim().Replace(" ", "");
+                if (!photoPath.StartsWith("/"))
+                {
+                    photoPath = "/" + photoPath;
+                }
+            }
+            <img src="@photoPath" height="80" style="border-radius: 8px;" />
+        </span>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions">
+            <input type="submit" value="删除" class="btn btn-danger" onclick="return confirm('确定要删除吗？')" />
+            @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

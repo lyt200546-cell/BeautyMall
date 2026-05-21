@@ -1,0 +1,67 @@
+﻿@model MZWlyt.Models.tb_user
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>会员注册</h2>
+
+<div class="register-container">
+    <div class="register-card">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="register-form">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.uname, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.uname, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入用户名" } })
+                    @Html.ValidationMessageFor(model => model.uname, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入密码" } })
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.confirmPassword, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.confirmPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "请确认密码" } })
+                    @Html.ValidationMessageFor(model => model.confirmPassword, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.address, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入地址" } })
+                    @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.tel, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.tel, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入电话" } })
+                    @Html.ValidationMessageFor(model => model.tel, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入邮箱" } })
+                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="注册" class="btn-register" />
+                </div>
+            </div>
+        }
+
+        <div class="register-back">
+            @Html.ActionLink("返回用户列表", "Index")
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

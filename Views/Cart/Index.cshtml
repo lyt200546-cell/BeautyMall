@@ -1,0 +1,36 @@
+﻿@model IEnumerable<MZWlyt.Models.tb_cart>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>我的购物车</h2>
+
+@if (Model.Any())
+{
+    foreach (var item in Model)
+    {
+        var photoPath = item.tb_product.photo.Trim().Replace(" ", "");
+        <div class="cart-item">
+            <img src="@photoPath" alt="@item.pname" />
+            <div class="cart-info">
+                <h4>@Html.DisplayFor(modelItem => item.pname)</h4>
+                <div class="price">@Html.DisplayFor(modelItem => item.price) × @Html.DisplayFor(modelItem => item.nums)</div>
+            </div>
+            <div class="cart-actions">
+                @Html.ActionLink("编辑", "Edit", new { id = item.cid }) |
+                @Html.ActionLink("详情", "Details", "Product", new { id = item.pid }, null) |
+                @Html.ActionLink("删除", "Delete", new { id = item.cid })
+            </div>
+        </div>
+    }
+    <div class="cart-submit">
+        @Html.ActionLink("提交订单", "InsertOrder", "Orders", null, new { @class = "btn btn-primary" })
+    </div>
+}
+else
+{
+    <div class="cart-empty">
+        <p>购物车是空的</p>
+    </div>
+}

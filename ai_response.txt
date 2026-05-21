@@ -1,0 +1,1 @@
+{"created":0,"model":"","reply":"","choices":null,"base_resp":{"status_code":2013,"status_msg":"invalid params, binding: expr_path=bot_setting, cause=missing required parameter"}}

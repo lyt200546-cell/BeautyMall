@@ -1,0 +1,37 @@
+@model MZWlyt.Models.tb_message
+
+@{
+    ViewBag.Title = "我要留言";
+}
+
+<h2>我要留言</h2>
+
+<div class="form-container">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入留言标题" } })
+            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.mess, htmlAttributes: new { @class = "control-label" })
+            @Html.TextAreaFor(model => model.mess, new { @class = "form-control", rows = 5, placeholder = "请输入留言内容" })
+            @Html.ValidationMessageFor(model => model.mess, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" value="提交留言" class="btn btn-primary" />
+            @Html.ActionLink("返回留言列表", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

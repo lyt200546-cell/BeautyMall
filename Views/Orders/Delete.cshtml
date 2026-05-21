@@ -1,0 +1,41 @@
+﻿@model MZWlyt.Models.tb_orders
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>确定要删除订单吗？</h2>
+
+<div class="detail-card">
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.uname)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.uname)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.orderTime)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.orderTime)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.allPrice)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.allPrice)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.address)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.address)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.tel)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.tel)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.pcounts)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.pcounts) 件</span>
+    </div>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <div class="form-actions">
+            <input type="submit" value="删除" class="btn btn-danger" onclick="return confirm('确定要删除吗？')" />
+            @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

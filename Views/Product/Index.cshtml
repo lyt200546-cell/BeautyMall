@@ -1,0 +1,168 @@
+@using MZWlyt.Models
+@using PagedList.Mvc
+@model PagedList.PagedList<MZWlyt.Models.tb_product>
+
+@{
+    ViewBag.Title = "Index";
+    bool isAdmin = Session["Role"] != null && Session["Role"].ToString() == "admin";
+}
+
+<h2>产品首页</h2>
+
+<form action="@Url.Action("Index", "Product")" method="get" class="search-form" style="display: flex; gap: 10px; align-items: center;">
+    <input type="text" name="search" class="form-control" placeholder="搜索商品名称..." value="@Request.QueryString["search"]" style="width: 300px; height: 38px;" />
+    <button type="submit" class="btn btn-primary" style="height: 38px;">搜索</button>
+    <button type="button" class="btn btn-ai" onclick="showAIDialog()" style="height: 38px;">AI推荐</button>
+    @if (!string.IsNullOrEmpty(Request.QueryString["search"]))
+    {
+        <a href="@Url.Action("Index", "Product")" class="btn btn-default" style="height: 38px; line-height: 26px;">清除</a>
+    }
+</form>
+
+<!-- AI推荐弹窗 -->
+<div id="aiDialog" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">AI智能推荐</h4>
+            </div>
+            <div class="modal-body">
+                <p>描述你想要的产品，例如："我皮肤有点干"</p>
+                <textarea id="aiInput" class="form-control" rows="3" placeholder="描述你想要的产品..."></textarea>
+                <div id="aiLoading" style="display:none; margin-top:10px;">
+                    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" width="30" />
+                    <span>AI正在分析...</span>
+                </div>
+                <div id="aiThinking" style="display:none; margin-top:10px; padding:10px; background:#f5f5f5; border-radius:5px; font-size:13px; color:#333; max-height:300px; overflow-y:auto;">
+                </div>
+            </div>
+            <div class="modal-footer" id="aiFooter" style="display:none;">
+                <button type="button" class="btn btn-default" onclick="regenerateAI()">重新生成</button>
+                <button type="button" class="btn btn-primary" onclick="confirmAI()">确认</button>
+            </div>
+            <div class="modal-footer" id="aiInputFooter">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="submitAI()">推荐</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showAIDialog() {
+    $('#aiDialog').modal('show');
+}
+
+function submitAI() {
+    var input = $('#aiInput').val().trim();
+    if (!input) {
+        alert('请输入您想要的产品描述');
+        return;
+    }
+
+    $('#aiLoading').show();
+    $('#aiThinking').hide().html('');
+    $.ajax({
+        url: '@Url.Action("AIRecommend", "Product")',
+        type: 'POST',
+        data: { userInput: input },
+        success: function(data) {
+            if (data.success) {
+                // 显示AI分析内容给用户看
+                var resultHtml = '<div style="margin-bottom:10px; padding:10px; background:#f5f5f5; border-radius:5px; font-size:14px; line-height:1.6;">';
+                resultHtml += data.reply.replace(/\n/g, '<br>');
+                resultHtml += '</div>';
+                $('#aiThinking').show().html(resultHtml);
+                $('#aiInputFooter').hide();
+                $('#aiFooter').show();
+
+                // 保存关键词，用户确认后自动搜索
+                $('#aiFooter').data('keyword', data.keyword);
+            } else {
+                // 显示错误信息
+                var errorMsg = data.message || '推荐失败';
+                if (data.debug) {
+                    errorMsg += '\n\n调试信息: ' + data.debug;
+                }
+                $('#aiThinking').show().html('<div style="color:red;">' + errorMsg.replace(/\n/g, '<br>') + '</div>');
+            }
+        },
+        error: function(xhr) {
+            try {
+                var resp = JSON.parse(xhr.responseText);
+                alert('错误: ' + resp.message + '\n\n详细信息: ' + (resp.debug || resp.stack || ''));
+            } catch(e) {
+                alert('请求失败: ' + xhr.responseText);
+            }
+        },
+        complete: function() {
+            $('#aiLoading').hide();
+        }
+    });
+}
+
+function regenerateAI() {
+    // 重新生成 - 重新调用AI
+    var input = $('#aiInput').val().trim();
+    if (!input) return;
+
+    $('#aiFooter').hide();
+    $('#aiInputFooter').show();
+    $('#aiThinking').hide();
+    submitAI();
+}
+
+function confirmAI() {
+    // 确认 - 跳转搜索
+    var keyword = $('#aiFooter').data('keyword');
+    if (keyword) {
+        $('#aiDialog').modal('hide');
+        $('input[name="search"]').val(keyword);
+        $('.search-form').submit();
+    }
+}
+</script>
+
+@if (!string.IsNullOrEmpty(Request.QueryString["search"]))
+{
+    <p style="color: #6B6B6B; margin-bottom: 20px;">
+        @if (ViewBag.IsAI == true)
+        {
+            <text>🤖 AI智能推荐：找到 @Model.TotalItemCount 个商品</text>
+        }
+        else
+        {
+            <text>搜索 "@Request.QueryString["search"]" 找到 @Model.TotalItemCount 个商品</text>
+        }
+    </p>
+}
+
+@if (isAdmin) {
+    <p>
+        @Html.ActionLink("添加产品", "Create", null, new { @class = "btn btn-primary" })
+    </p>
+}
+
+<div class="product-grid">
+    @foreach (var item in Model)
+    {
+        var photoPath = item.photo.Trim().Replace(" ", "");
+        <div class="product-card">
+            <img src="@photoPath" alt="@item.pname" />
+            <div class="product-name">@Html.DisplayFor(modelItem => item.pname)</div>
+            <div class="product-price">@Html.DisplayFor(modelItem => item.price)</div>
+            <div class="product-actions">
+                @Html.ActionLink("详情", "Details", new { id = item.pid }, new { @class = "btn-detail" })
+                @Html.ActionLink("加入购物车", "JoinCart", "Cart", new { id = item.pid }, new { @class = "btn-cart" })
+            </div>
+        </div>
+    }
+</div>
+<div>
+    每页 @Model.PageSize 条记录, 共 @Model.PageCount 页, 当前第 @Model.PageNumber 页
+    @{
+        var search = Request.QueryString["search"];
+    }
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, search }))
+</div>

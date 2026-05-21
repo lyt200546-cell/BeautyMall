@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MZWlyt.Models.tb_orderDetails>
+
+@{
+    ViewBag.Title = "订单详细信息";
+}
+
+<h2>订单详细信息</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            订单编号
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.pname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nums)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.photo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.states)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.oid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.pname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nums)
+        </td>
+        <td>
+            @{
+                var photoPath = item.tb_product.photo.Trim().Replace(" ", "");
+                if (!photoPath.StartsWith("/"))
+                {
+                    photoPath = "/" + photoPath;
+                }
+            }
+            <img src="@photoPath" height="50" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.states)
+        </td>
+    </tr>
+}
+
+</table>
+
+<div>
+    @Html.ActionLink("返回订单列表", "Index", "Orders")
+</div>

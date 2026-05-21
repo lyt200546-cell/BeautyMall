@@ -1,0 +1,85 @@
+﻿@model IEnumerable<MZWlyt.Models.tb_orders>
+
+@{
+    ViewBag.Title = "订单首页";
+}
+
+<h2>订单首页</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.uname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.orderTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.allPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.pcounts)
+        </th>
+        <th>
+            订单状态
+        </th>
+        <th>操作</th>
+    </tr>
+
+@{
+    var orderStates = ViewData;
+}
+
+@foreach (var item in Model) {
+    var orderState = orderStates[item.oid.ToString()] as string;
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.uname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.orderTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.allPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.pcounts) 件
+        </td>
+        <td>
+            @if (orderState == "未付款")
+            {
+                <span style="color: red;">未付款</span>
+            }
+            else if (orderState == "已付款")
+            {
+                <span style="color: green;">已付款</span>
+            }
+            else
+            {
+                <span>@orderState</span>
+            }
+        </td>
+        <td>
+            @if (orderState == "未付款")
+            {
+                @Html.ActionLink("付款", "Pay", new { id = item.oid }, new { @class = "btn btn-primary btn-xs", onclick = "return confirm('确认付款?')" }) @:|
+            }
+            @Html.ActionLink("详情", "Index", "OrderDetails", new { oid = item.oid }, null) |
+            @Html.ActionLink("删除", "Delete", new { id = item.oid })
+        </td>
+    </tr>
+}
+
+</table>

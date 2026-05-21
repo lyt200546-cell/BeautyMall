@@ -1,0 +1,89 @@
+﻿@model MZWlyt.Models.tb_product
+
+@{
+    ViewBag.Title = "添加商品";
+}
+
+<h2>添加商品</h2>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="form-container">
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.pname, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.pname, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入商品名称" } })
+            @Html.ValidationMessageFor(model => model.pname, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.photo, htmlAttributes: new { @class = "control-label" })
+            <input type="file" name="photo" id="photo" class="form-control" accept="image/*" onchange="previewImage(this)" style="height: auto; padding: 10px;" />
+            <img id="imgPreview" src="#" alt="图片预览" style="display:none; width:300px; height:300px; margin-top:10px; object-fit: cover;" class="img-thumbnail" />
+            <p class="text-muted">支持 JPG、PNG、GIF 格式图片</p>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.price, htmlAttributes: new { @class = "control-label" })
+            <div class="input-group">
+                <span class="input-group-addon">¥</span>
+                @Html.EditorFor(model => model.price, new { htmlAttributes = new { @class = "form-control", placeholder = "0.00" } })
+            </div>
+            @Html.ValidationMessageFor(model => model.price, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.pnums, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.pnums, new { htmlAttributes = new { @class = "form-control", placeholder = "库存数量" } })
+            @Html.ValidationMessageFor(model => model.pnums, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.salenums, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.salenums, new { htmlAttributes = new { @class = "form-control", placeholder = "销量" } })
+            @Html.ValidationMessageFor(model => model.salenums, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">商品描述</label>
+            <textarea name="state" class="form-control" rows="5" placeholder="请输入商品描述"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">商品状态</label>
+            <select name="mess" class="form-control">
+                <option value="有货">有货</option>
+                <option value="无货">无货</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" value="保存" class="btn btn-success" />
+            <input type="reset" value="重置" class="btn btn-default" />
+            @Html.ActionLink("返回列表", "Index", "Product", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#imgPreview").attr("src", e.target.result).show();
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

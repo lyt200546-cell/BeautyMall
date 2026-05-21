@@ -1,0 +1,73 @@
+@using PagedList.Mvc
+@using MZWlyt.Models
+@model PagedList.PagedList<MZWlyt.Models.tb_message>
+
+@{
+    ViewBag.Title = "网站留言";
+}
+
+<h2>网站留言</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<p>
+    @Html.ActionLink("我要留言", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().mess)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().uname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().messDate)
+            </th>
+            @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
+            {
+                <th>操作</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mess)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.messDate)
+                </td>
+                @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
+                {
+                    <td>
+                        @Html.ActionLink("删除", "Delete", new { id = item.mid }, new { @class = "btn btn-danger btn-sm" })
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    每页 @Model.PageSize 条记录, 共 @Model.PageCount 页, 当前第 @Model.PageNumber 页
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>

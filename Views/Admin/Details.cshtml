@@ -1,0 +1,30 @@
+﻿@model MZWlyt.Models.tb_admin
+
+@{
+    ViewBag.Title = "管理员详情";
+}
+
+<h2>管理员详情</h2>
+
+<div class="detail-card">
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.aid)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.aid)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.aname)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.aname)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.password)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.password)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.tel)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.tel)</span>
+    </div>
+    <div class="form-actions">
+        @Html.ActionLink("编辑", "Edit", new { id = Model.aid }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("返回首页", "Index", null, new { @class = "btn btn-default" })
+    </div>
+</div>

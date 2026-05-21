@@ -1,0 +1,42 @@
+﻿@model MZWlyt.Models.tb_admin
+
+@{
+    ViewBag.Title = "登录";
+}
+
+<h2>管理员登录</h2>
+
+<div class="login-wrapper">
+    <div class="login-container">
+        <div class="login-card">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="login-form">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.aname, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.aname, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入管理员用户名" } })
+                        @Html.ValidationMessageFor(model => model.aname, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", placeholder = "请输入密码" } })
+                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-actions" style="display: block;">
+                        <input type="submit" value="管理员登录" class="btn-login" style="width: auto; padding: 12px 32px;" />
+                        @Html.ActionLink("会员登录", "Login", "User", null, new { @class = "btn btn-default", style = "padding: 12px 32px; margin-left: 12px;" })
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,40 @@
+﻿@model MZWlyt.Models.tb_product
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>商品详情</h2>
+
+<div class="detail-container">
+    <div class="row">
+        <div class="col-md-5 detail-left">
+            @{
+                var photoPath = Model.photo.Trim().Replace(" ", "");
+            }
+            <img src="@photoPath" alt="@Model.pname" />
+        </div>
+        <div class="col-md-7 detail-right">
+            <h3>@Html.DisplayFor(model => model.pname)</h3>
+            <div class="detail-price">@Html.DisplayFor(model => model.price)</div>
+            <div class="detail-info">
+                <p><strong>库存：</strong> @Html.DisplayFor(model => model.pnums)</p>
+                <p><strong>销量：</strong> @Html.DisplayFor(model => model.salenums)</p>
+                <p><strong>商品描述：</strong> @Html.DisplayFor(model => model.state)</p>
+                <p><strong>商品状态：</strong> @Html.DisplayFor(model => model.mess)</p>
+            </div>
+            <div class="detail-actions">
+                @if (Session["Role"] != null && Session["Role"].ToString() == "admin")
+                {
+                    @Html.ActionLink("编辑", "Edit", new { id = Model.pid }, new { @class = "btn btn-default" })
+                }
+                else
+                {
+                    @Html.ActionLink("加入购物车", "JoinCart", "Cart", new { id = Model.pid }, new { @class = "btn btn-primary" })
+                    <span style="margin-left: 10px;"></span>
+                    @Html.ActionLink("返回首页", "Index", null, new { @class = "btn btn-default" })
+                }
+            </div>
+        </div>
+    </div>
+</div>

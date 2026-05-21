@@ -1,0 +1,33 @@
+@model MZWlyt.Models.tb_message
+
+@{
+    ViewBag.Title = "删除留言";
+}
+
+<h2>删除留言</h2>
+
+<div class="detail-card">
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.title)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.title)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.mess)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.mess)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.uname)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.uname)</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">@Html.DisplayNameFor(model => model.messDate)</span>
+        <span class="detail-value">@Html.DisplayFor(model => model.messDate)</span>
+    </div>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        <div class="form-actions">
+            <input type="submit" value="删除" class="btn btn-danger" onclick="return confirm('确定要删除吗？')" />
+            @Html.ActionLink("返回列表", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

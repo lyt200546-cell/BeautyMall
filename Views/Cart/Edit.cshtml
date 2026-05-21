@@ -1,0 +1,25 @@
+@model MZWlyt.Models.tb_cart
+
+@{
+    ViewBag.Title = "修改数量";
+}
+
+<h2>修改商品数量</h2>
+
+<div class="form-container">
+    @using (Html.BeginForm("Edit", "Cart", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.cid)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.nums, htmlAttributes: new { @class = "control-label" })
+            <input type="number" name="nums" value="@Model.nums" class="form-control" min="1" />
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" value="保存" class="btn btn-primary" />
+            @Html.ActionLink("返回购物车", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

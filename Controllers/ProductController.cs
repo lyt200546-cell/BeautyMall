@@ -312,7 +312,7 @@ pid == tb_product.pid);
 2. 搜索关键词必须是商品名称中的2-4个字，比如商品是'玻尿酸补水精华液'，关键词可以是'精华液'或'补水'";
 
                 // DeepSeek API配置
-                var apiKey = "sk-b6392c1286594a6c9f6eb6d5388cf01b";
+                var apiKey = ""; // 请在这里填入你的DeepSeek API Key，或使用环境变量
                 var model = "deepseek-chat";
 
                 var requestBody = new
